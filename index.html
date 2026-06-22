@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chain-SLAM: Globally Consistent Backend for Multi-Session LiDAR SLAM via Chained Loop Closure</title>
+
+  <meta name="description" content="Chain-SLAM is a real-time LiDAR–inertial SLAM backend for online multi-session map alignment and reuse via chained loop closure.">
+  <meta property="og:title" content="Chain-SLAM"/>
+  <meta property="og:description" content="Globally Consistent Backend for Multi-Session LiDAR SLAM via Chained Loop Closure"/>
+  <meta property="og:image" content="static/images/teaser.png"/>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+</head>
+<body>
+
+<!-- Title / authors / links -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-2 publication-title">
+            Chain-SLAM: Globally Consistent Backend for Multi-Session LiDAR SLAM via Chained Loop Closure
+          </h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><a href="https://zl3466.github.io/">Zhiheng Li</a>,</span>
+            <span class="author-block"><a href="https://gaaaavin.github.io/">Xinhao Liu</a>,</span>
+            <span class="author-block"><a href="https://juexzz.github.io/">Juexiao Zhang</a>,</span>
+            <span class="author-block"><a href="#">Yongqing Liang</a>,</span>
+            <span class="author-block"><a href="https://engineering.nyu.edu/faculty/chen-feng">Chen Feng</a></span>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">New York University</span>
+          </div>
+          <div class="is-size-5 publication-authors" style="margin-top:0.5rem;">
+            <span class="has-text-grey">IROS 2026</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- arXiv -->
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code -->
+              <span class="link-block">
+                <a href="https://github.com/zl3466/Chain-SLAM" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                </a>
+              </span>
+              <!-- Data -->
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-database"></i></span>
+                  <span>Data (ROS bags)</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Teaser -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img src="static/images/teaser.png" class="results-img" alt="Chained loop closures across mapping sessions">
+      <h2 class="subtitle has-text-centered" style="margin-top:1rem;">
+        <span class="dnerf">Direct</span> and <span class="dnerf">chained</span> loop closures between a
+        current session <i>i</i> and loaded sessions <i>j</i>, <i>k</i>. Each successful closure from the
+        current session triggers multiple chained closures to the loaded sessions, enhancing multi-session consistency.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<!-- Abstract -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Maintaining consistency over long spatial and temporal horizons remains a fundamental challenge in
+            large-scale LiDAR SLAM, particularly when integrating maps collected across multiple sessions. We present
+            <b>Chain-SLAM</b>, a LiDAR SLAM backend enabling online multi-session map alignment and reuse with global
+            consistency at large scale. We implement a chained loop closure mechanism that efficiently propagates
+            geometric constraints across inter-session keyframes through an adjacency graph, enabling robust
+            long-horizon consistency triggered by reliable short-horizon loop closures. The system initializes
+            inter-session alignment with GNSS-proximity place recognition, then performs on-the-fly loop closure
+            detection and joint optimization of loaded maps and newly acquired trajectories within a unified factor
+            graph, maintaining both inter- and intra-session geometric consistency without dynamic object removal,
+            and cross-platform robustness with minimal hyperparameter tuning. Experimental results show improved
+            trajectory accuracy and robust multi-session integration on large-scale datasets. We release our source
+            code to support reproducible research in large-scale multi-session LiDAR SLAM.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Method -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full">
+        <h2 class="title is-3 has-text-centered">Chained Loop Closure</h2>
+        <div class="content">
+          <figure class="image">
+            <img src="static/images/graph.png" class="results-img" alt="Chained closure detection and verification pipeline">
+            <figcaption class="has-text-centered">
+              Starting from a new direct loop closure, a BFS over the pose graph gathers connected keyframes,
+              ICP verifies each candidate chained closure (accepting those with residual <i>e<sub>ij</sub> ≤ τ</i>),
+              and the verified constraints are added as new edges to the adjacency graph.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Results -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full">
+        <h2 class="title is-3 has-text-centered">Results</h2>
+        <div class="content">
+          <figure class="image">
+            <img src="static/images/eval.png" class="results-img" alt="Trajectory evaluation across sessions">
+            <figcaption class="has-text-centered">
+              Estimated trajectories across multiple sessions (top vs. bottom rows) overlaid per session, with the
+              per-session alignment error against ground truth shown on the right. Evaluated on the multi-session
+              MARS and NCLT datasets.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BibTeX -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3">BibTeX</h2>
+    <pre><code>@inproceedings{li2026chainslam,
+  title     = {Chain-SLAM: Globally Consistent Backend for Multi-Session LiDAR SLAM via Chained Loop Closure},
+  author    = {Li, Zhiheng and Liu, Xinhao and Zhang, Juexiao and Liang, Yongqing and Feng, Chen},
+  booktitle = {IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+  year      = {2026}
+}</code></pre>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content has-text-centered">
+          <p>
+            This website is licensed under a
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons
+            Attribution-ShareAlike 4.0 International License</a>. It borrows the
+            <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> project page template.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
