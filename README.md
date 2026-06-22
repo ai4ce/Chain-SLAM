@@ -1,8 +1,10 @@
 # [IROS 2026] Chain-SLAM: Globally Consistent Backend for Multi-Session LiDAR SLAM via Chained Loop Closure
 
-[Zhiheng Li](.), [Xinhao Liu](.), [Juexiao Zhang](.), [Yongqing Liang](.), [Chen Feng](.)
+[Zhiheng Li](https://zl3466.github.io/), [Xinhao Liu](https://gaaaavin.github.io/), [Juexiao Zhang](https://juexzz.github.io/), [Yongqing Liang](https://lyq.me/scholar), [Chen Feng](https://engineering.nyu.edu/faculty/chen-feng)
 
 New York University
+
+<a href='https://arxiv.org/abs/0000.00000'><img src='https://img.shields.io/badge/Paper-arXiv-red'></a> <a href='https://ai4ce.github.io/Chain-SLAM/'><img src='https://img.shields.io/badge/Project-homepage-green'></a> <a href='https://huggingface.co/datasets/ai4ce/Chain-SLAM'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Dataset-blue'></a>
 
 ### TL;DR: Chain-SLAM is a real-time LiDAR–inertial SLAM backend for online multi-session map alignment and reuse, propagating loop-closure constraints across sessions via *chained loop closure* for globally consistent large-scale mapping.
 
