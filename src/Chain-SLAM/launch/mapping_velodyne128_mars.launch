@@ -1,0 +1,33 @@
+<launch>
+  <!-- Launch file for velodyne128 Mars LiDAR -->
+
+    <arg name="rviz" default="true" />
+    <arg name="save_directory" default="/fast_lio_sam_ws/src/FAST_LIO_SAM/PCD/" doc="Directory for saving poses and maps (relative to $HOME)" />
+    <arg name="log_subfolder" default="" doc="Subfolder name under Log/ directory for saving mat_pre.txt, mat_out.txt, imu.txt, and pos_log.txt files. If empty, files are saved directly in Log/ directory." />
+
+    <!-- Run mode: full_raw | optimize_pose | optimize_z (see config RUN MODE header) -->
+    <arg name="mode" default="full_raw" doc="Run mode: full_raw, optimize_pose, or optimize_z" />
+    <rosparam command="load" file="$(find fast_lio_sam)/config/velodyne128_mars_maisy_$(arg mode).yaml" />
+    
+    <!-- Override save directory from config if argument is provided -->
+    <param name="savePCDDirectory" type="string" value="$(arg save_directory)" />
+    
+    <!-- Set log subfolder parameter -->
+    <param name="log_subfolder" type="string" value="$(arg log_subfolder)" />
+
+    <param name="feature_extract_enable" type="bool" value="0"/>
+    <param name="point_filter_num" type="int" value="4"/>
+    <param name="max_iteration" type="int" value="3" />
+  <!-- per-frame downsample resolution after distortion correction -->
+    <param name="filter_size_surf" type="double" value="0.5" />
+    <param name="filter_size_map" type="double" value="0.5" />
+    <param name="cube_side_length" type="double" value="1000" />
+    <param name="runtime_pos_log_enable" type="bool" value="1" />
+    <node pkg="fast_lio_sam" type="fastlio_sam_mapping" name="laserMapping" output="screen" /> 
+
+    <group if="$(arg rviz)">
+    <node launch-prefix="nice" pkg="rviz" type="rviz" name="rviz" args="-d $(find fast_lio_sam)/rviz_cfg/mars.rviz" />
+    </group>
+
+</launch>
+

@@ -1,0 +1,137 @@
+# NCLT dataset (Velodyne HDL-32E). Run mode is full_raw (no external pose stream);
+# set reference_init.enable + useXYFactor to use a reference pose (see the mars configs).
+
+common:
+    lid_topic:  /lidar/points
+    imu_topic:  /imu/data
+    gnss_topic: /gps/fix          # sensor_msgs/NavSatFix
+    time_sync_en: false           # only enable when external time sync is impossible
+
+preprocess:
+    lidar_type: 2                 # 1 Livox, 2 Velodyne, 3 Ouster
+    scan_line: 32
+    scan_rate: 10                 # Hz, Velodyne only
+    timestamp_unit: 2             # time/t field unit: 0 s, 1 ms, 2 us, 3 ns
+    blind: 4
+    pre_deskewed: false           # true: skip deskewing (cloud already undistorted, e.g. NCLT velodyne_sync)
+
+mapping:
+    acc_cov: 0.01
+    gyr_cov: 0.01
+    b_acc_cov: 0.0001
+    b_gyr_cov: 0.0001
+    laser_point_cov: 0.001        # LiDAR measurement noise: higher = trust LiDAR less
+    fov_degree:    180
+    det_range:     100.0
+    extrinsic_est_en:  false      # true: online IMU-LiDAR extrinsic estimation
+    extrinsic_T: [0, 0, 0.28]
+    extrinsic_R: [1, 0, 0,
+                  0, 1, 0,
+                  0, 0, 1]
+    # GNSS-LiDAR extrinsics (GNSS -> LiDAR frame)
+    extrinT_Gnss2Lidar: [0, 0, 0]
+    extrinR_Gnss2Lidar: [1, 0, 0,
+                  0, 1, 0,
+                  0, 0, 1]
+
+publish:
+    path_en:  true
+    scan_publish_en:  true        # false: disable all point cloud output
+    dense_publish_en: true        # false: fewer points in global-frame scans
+    scan_bodyframe_pub_en: true   # true: also output scans in IMU-body frame
+
+pcd_save:
+    pcd_save_en: false
+    interval: -1                  # LiDAR frames per pcd file; -1: all in one (memory heavy)
+
+# Voxel filter sizes
+odometrySurfLeafSize: 0.4                       # 0.4 outdoor, 0.2 indoor
+mappingCornerLeafSize: 0.2                      # 0.2 outdoor, 0.1 indoor
+mappingSurfLeafSize: 0.4                        # 0.4 outdoor, 0.2 indoor
+keyframeStorageDownsampleEn: false             # downsample stored keyframe clouds to save memory
+
+# Robot motion constraint (for a 2D robot)
+z_tollerance: 1000                             # meters
+rotation_tollerance: 1000                      # radians
+
+# CPU
+numberOfCores: 4
+mappingProcessInterval: 0.15                   # seconds
+
+# Surrounding map
+surroundingkeyframeAddingDistThreshold: 3      # meters, keyframe add distance threshold
+surroundingkeyframeAddingAngleThreshold: 0.2   # radians, keyframe add angle threshold
+surroundingKeyframeDensity: 2.0                # meters, downsample surrounding keyframe poses
+surroundingKeyframeSearchRadius: 50.0          # meters, scan-to-map radius (loop closure disabled)
+
+# GPS-based map merge: align a new run to a loaded map when GNSS is close.
+# Pipeline: FPFH descriptor -> RANSAC global registration -> ICP refinement
+gpsMapMerge:
+    enabled: true
+    distance_threshold: 10.0      # meters, GNSS distance to trigger a merge attempt
+    ransac_fitness_threshold: 0.5 # min RANSAC fitness (inliers/target) [0,1]; larger = stricter
+    ransac_min_rotation_rad: 0.05 # reject near-identity: rot < this AND trans < min_translation
+    ransac_min_translation_m: 1.0 # reject near-identity: trans < this AND rot < min_rotation
+    post_rebuild_wait_sec: 0.5    # wait after ISAM2 rebuild before double-check
+    ransac_inlier_dist: 1         # RANSAC inlier distance (m)
+    ransac_max_iterations: 10000
+    voxel_size: 1                 # voxel downsample before FPFH (m)
+    fpfh_radius: 5                # FPFH search radius (m)
+    fpfh_max_nn: 100              # FPFH max neighbors (0 = radius only)
+    normal_radius: 2.0            # normal estimation radius (m)
+    mutual_filter: true           # mutual NN in feature matching
+
+# Loop closure
+loopClosureEnableFlag: true
+loopClosureFrequency: 0.3                      # Hz, loop closure add frequency
+historyKeyframeSearchRadius: 15                # meters, candidate keyframe search radius
+loopClosureDistance2D: false                   # true: x,y-only distance (ignore z)
+historyKeyframeSearchTimeDiff: 30.0            # seconds, min age of candidate keyframe
+historyKeyframeSearchNum: 20                   # keyframes fused into a loop-closure submap
+historyKeyframeMSEThreshold: 0.3               # ICP MSE threshold; smaller = stricter
+postMergeClosureSkipFrames: 4                  # skip n keyframes after each post-merge closure
+loopClosure2D:                                 # GNSS 2D fallback when 3D fails (currently buggy)
+    enabled: false
+    distance_threshold: 10.0                   # meters, GNSS UTM candidate distance
+loopClosure:
+    add_chained_closures: true                 # propagate Between() to connected loaded keyframes (BFS)
+    noise_scale: 0.0001                        # loop closure noise scale; lower = stronger constraint
+
+imuInit:
+    max_ini_count: 40                          # max IMU init iterations (fewer = faster, less accurate)
+    init_time: 0.1                             # seconds, EKF init check threshold
+
+# GNSS/GPS
+useImuHeadingInitialization: false
+useGnssOptimization: false                     # GPS factors in ISAM2
+useGpsElevation: false                         # use GPS elevation (only if useGnssOptimization)
+gpsCovThreshold: 2.0                           # GPS covariance threshold (m^2)
+poseCovThreshold: 25.0                         # ISAM2 pose covariance threshold
+
+# XY factor: PriorFactor constraining each keyframe to the external reference pose.
+# Noise = per-DOF variance (order: roll, pitch, yaw [rad^2], x, y, z [m^2]); lower = stronger.
+useXYFactor: false                             # full_raw: false (no reference pose)
+xyFactor:
+    noise_roll: 0.001
+    noise_pitch: 0.0001
+    noise_yaw: 0.0001
+    noise_x: 0.1
+    noise_y: 0.1
+    noise_z: 1
+
+# Reference-odometry init: the first reference message aligns camera_init with the world frame;
+# per frame x/y/roll/pitch/yaw come from the reference and z is propagated from IMU/LiDAR.
+reference_init:
+    enable: false                              # full_raw: false
+    topic: "/pose"                             # reference odometry topic (nav_msgs/Odometry)
+
+# Visualization
+globalMapVisualizationSearchRadius: 400.0      # meters
+globalMapVisualizationPoseDensity: 10          # meters
+globalMapVisualizationLeafSize: 1.0            # meters
+visulize_IkdtreeMap: false
+recontructKdTree: true
+
+# Export
+savePCD: false
+savePCDDirectory: "/fast_lio_sam_ws/src/FAST_LIO_SAM/PCD/"   # starts and ends with "/"
