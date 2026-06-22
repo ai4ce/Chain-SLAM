@@ -1,16 +1,8 @@
 # Chain-SLAM
 
-A scalable, real-time LiDAR–inertial SLAM backend for online **multi-session** map
-alignment and reuse with global consistency at large scale. Chain-SLAM loads
-existing maps, merges and aligns them on the fly, and jointly optimizes loaded maps
-and newly acquired trajectories in a unified factor graph — maintaining both inter-
-and intra-session geometric consistency without dynamic object removal.
+### TL;DR: Chain-SLAM is a real-time LiDAR–inertial SLAM backend for online multi-session map alignment and reuse, propagating loop-closure constraints across sessions via *chained loop closure* for globally consistent large-scale mapping.
 
-Its core is a **chained loop closure** mechanism that propagates geometric
-constraints across inter-session keyframes through an adjacency graph, so reliable
-short-horizon loop closures yield robust long-horizon consistency. Inter-session
-alignment is initialized with GNSS-proximity place recognition, and cross-platform
-robustness is achieved with minimal hyperparameter tuning.
+Evaluated on the multi-session **[MARS](https://example.com/dataset/mars)** and **[NCLT](https://example.com/dataset/nclt)** datasets · pre-converted ROS bags [here](https://example.com/chain-slam/rosbags). <!-- TODO: replace with real links -->
 
 ![Teaser: chained loop closures across mapping sessions](fig/teaser.png)
 
@@ -18,10 +10,6 @@ robustness is achieved with minimal hyperparameter tuning.
 sessions `j`, `k`. Each successful closure from the current session triggers
 multiple chained closures to the loaded sessions, enhancing multi-session
 consistency.*
-
-We evaluate on the large-scale multi-session **[MARS](https://example.com/dataset/mars)**
-and **[NCLT](https://example.com/dataset/nclt)** datasets. Pre-converted ROS bags
-are available [here](https://example.com/chain-slam/rosbags). <!-- TODO: replace with real links -->
 
 Everything runs inside a ROS Noetic Docker container. The workspace lives in `src/`:
 
