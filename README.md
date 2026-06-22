@@ -1,4 +1,8 @@
-# Chain-SLAM
+# [IROS 2026] Chain-SLAM: Globally Consistent Backend for Multi-Session LiDAR SLAM via Chained Loop Closure
+
+[Zhiheng Li](.), [Xinhao Liu](.), [Juexiao Zhang](.), [Yongqing Liang](.), [Chen Feng](.)
+
+New York University
 
 ### TL;DR: Chain-SLAM is a real-time LiDAR–inertial SLAM backend for online multi-session map alignment and reuse, propagating loop-closure constraints across sessions via *chained loop closure* for globally consistent large-scale mapping.
 
@@ -11,22 +15,6 @@ sessions `j`, `k`. Each successful closure from the current session triggers
 multiple chained closures to the loaded sessions, enhancing multi-session
 consistency.*
 
-Everything runs inside a ROS Noetic Docker container. The workspace lives in `src/`:
-
-- `Chain-SLAM/` — the SLAM package (`fast_lio_sam`)
-- `livox_ros_driver/` — Livox driver dependency
-
----
-
-## How it works
-
-![Chained closure detection and verification pipeline](fig/graph.png)
-
-Starting from a new direct loop closure, a BFS over the pose graph gathers
-connected keyframes, ICP verifies each candidate chained closure
-(accepting those with residual `e_ij ≤ τ`), and the verified constraints are added
-as new edges to the adjacency graph.
-
 ---
 
 ## Results
@@ -38,6 +26,8 @@ session, with the per-session alignment error against ground truth shown on the
 right.
 
 ---
+
+# Getting Started
 
 ## 1. Build the Docker environment
 
