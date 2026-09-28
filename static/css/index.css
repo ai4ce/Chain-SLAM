@@ -162,3 +162,16 @@ pre {
 .section-alt pre {
   background-color: #fff;
 }
+
+/* Groups the comparison heading, its description and the video pair into one unit. */
+.compare-card {
+  margin-top: 2.5rem;
+  padding: 1.5rem 1.5rem 1.75rem;
+  background: #fff;
+  border: 1px solid #dde2e8;
+  border-radius: 10px;
+}
+
+.compare-card .pair-caption {
+  text-align: center;
+}
