@@ -131,3 +131,34 @@ body {
 pre {
   border-radius: 6px;
 }
+
+/* Section separation: alternating background bands plus an accent rule under each title. */
+.section-alt {
+  background-color: #f3f5f8;
+  border-top: 1px solid #e3e7ec;
+  border-bottom: 1px solid #e3e7ec;
+}
+
+.section > .container > h2.title,
+.section .column > h2.title {
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.75rem;
+  position: relative;
+}
+
+.section > .container > h2.title::after,
+.section .column > h2.title::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 56px;
+  height: 4px;
+  margin-left: -28px;
+  border-radius: 2px;
+  background: hsl(204, 86%, 53%);
+}
+
+.section-alt pre {
+  background-color: #fff;
+}

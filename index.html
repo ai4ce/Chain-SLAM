@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="static/css/index.css?v=2">
+  <link rel="stylesheet" href="static/css/index.css?v=3">
 </head>
 <body>
 
@@ -72,23 +72,8 @@
   </div>
 </section>
 
-<!-- Overview video -->
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
-      <video class="video-player" controls preload="metadata" poster="static/images/main_poster.jpg">
-        <source src="static/videos/main.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-      <h2 class="subtitle has-text-centered" style="margin-top:1rem;">
-        Overview of <span class="dnerf">Chain-SLAM</span>.
-      </h2>
-    </div>
-  </div>
-</section>
-
 <!-- Abstract -->
-<section class="section">
+<section class="section section-alt">
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
@@ -110,8 +95,19 @@
   </div>
 </section>
 
-<!-- Method + A/B comparison -->
+<!-- Overview video -->
 <section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Overview Video</h2>
+    <video class="video-player" controls preload="metadata" poster="static/images/main_poster.jpg">
+      <source src="static/videos/main.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</section>
+
+<!-- Method + A/B comparison -->
+<section class="section section-alt">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Chained Loop Closure</h2>
 
@@ -174,7 +170,7 @@
 </section>
 
 <!-- Results -->
-<section class="section">
+<section class="section section-alt">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Results</h2>
 
@@ -249,7 +245,7 @@
 <!-- BibTeX -->
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
-    <h2 class="title is-3">BibTeX</h2>
+    <h2 class="title is-3 has-text-centered">BibTeX</h2>
     <pre><code>@inproceedings{li2026chainslam,
   title     = {Chain-SLAM: Globally Consistent Backend for Multi-Session LiDAR SLAM via Chained Loop Closure},
   author    = {Li, Zhiheng and Liu, Xinhao and Zhang, Juexiao and Liang, Yongqing and Feng, Chen},
