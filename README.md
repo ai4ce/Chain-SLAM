@@ -5,3 +5,6 @@ https://ai4ce.github.io/Chain-SLAM/
 
 Built with the Bulma-based Nerfies academic project page template (CDN-loaded,
 no build step). Edit `index.html` and the assets under `static/`.
+
+Videos live in `static/videos/` as web-optimised H.264 (`-movflags +faststart`);
+the side-by-side pairs are driven by `static/js/video-sync.js`.

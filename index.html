@@ -8,7 +8,7 @@
   <meta name="description" content="Chain-SLAM is a real-time LiDAR–inertial SLAM backend for online multi-session map alignment and reuse via chained loop closure.">
   <meta property="og:title" content="Chain-SLAM"/>
   <meta property="og:description" content="Globally Consistent Backend for Multi-Session LiDAR SLAM via Chained Loop Closure"/>
-  <meta property="og:image" content="static/images/teaser.png"/>
+  <meta property="og:image" content="static/images/main_poster.jpg"/>
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
@@ -31,7 +31,7 @@
             <span class="author-block"><a href="https://zl3466.github.io/">Zhiheng Li</a>,</span>
             <span class="author-block"><a href="https://gaaaavin.github.io/">Xinhao Liu</a>,</span>
             <span class="author-block"><a href="https://juexzz.github.io/">Juexiao Zhang</a>,</span>
-            <span class="author-block"><a href="#">Yongqing Liang</a>,</span>
+            <span class="author-block">Yongqing Liang,</span>
             <span class="author-block"><a href="https://engineering.nyu.edu/faculty/chen-feng">Chen Feng</a></span>
           </div>
           <div class="is-size-5 publication-authors">
@@ -45,7 +45,7 @@
             <div class="publication-links">
               <!-- arXiv -->
               <span class="link-block">
-                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                <a href="https://arxiv.org/abs/2609.12221" class="external-link button is-normal is-rounded is-dark">
                   <span class="icon"><i class="ai ai-arxiv"></i></span>
                   <span>arXiv</span>
                 </a>
@@ -57,11 +57,11 @@
                   <span>Code</span>
                 </a>
               </span>
-              <!-- Data -->
+              <!-- Poster -->
               <span class="link-block">
-                <a href="#" class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon"><i class="fas fa-database"></i></span>
-                  <span>Data (ROS bags)</span>
+                <a href="static/pdf/chainslam_poster.pdf" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-image"></i></span>
+                  <span>Poster</span>
                 </a>
               </span>
             </div>
@@ -72,15 +72,16 @@
   </div>
 </section>
 
-<!-- Teaser -->
+<!-- Overview video -->
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <img src="static/images/teaser.png" class="results-img" alt="Chained loop closures across mapping sessions">
+      <video class="video-player" controls preload="metadata" poster="static/images/main_poster.jpg">
+        <source src="static/videos/main.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
       <h2 class="subtitle has-text-centered" style="margin-top:1rem;">
-        <span class="dnerf">Direct</span> and <span class="dnerf">chained</span> loop closures between a
-        current session <i>i</i> and loaded sessions <i>j</i>, <i>k</i>. Each successful closure from the
-        current session triggers multiple chained closures to the loaded sessions, enhancing multi-session consistency.
+        Overview of <span class="dnerf">Chain-SLAM</span>.
       </h2>
     </div>
   </div>
@@ -94,18 +95,14 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Maintaining consistency over long spatial and temporal horizons remains a fundamental challenge in
-            large-scale LiDAR SLAM, particularly when integrating maps collected across multiple sessions. We present
-            <b>Chain-SLAM</b>, a LiDAR SLAM backend enabling online multi-session map alignment and reuse with global
-            consistency at large scale. We implement a chained loop closure mechanism that efficiently propagates
-            geometric constraints across inter-session keyframes through an adjacency graph, enabling robust
-            long-horizon consistency triggered by reliable short-horizon loop closures. The system initializes
-            inter-session alignment with GNSS-proximity place recognition, then performs on-the-fly loop closure
-            detection and joint optimization of loaded maps and newly acquired trajectories within a unified factor
-            graph, maintaining both inter- and intra-session geometric consistency without dynamic object removal,
-            and cross-platform robustness with minimal hyperparameter tuning. Experimental results show improved
-            trajectory accuracy and robust multi-session integration on large-scale datasets. We release our source
-            code to support reproducible research in large-scale multi-session LiDAR SLAM.
+            Staying geometrically consistent over long spatial and temporal horizons is a fundamental
+            challenge in large-scale LiDAR SLAM, especially when maps from many separate sessions must be
+            merged. <b>Chain-SLAM</b> is a LiDAR SLAM backend for online multi-session map alignment and
+            reuse at scale. A <i>chained loop closure</i> mechanism propagates each reliable short-horizon
+            closure across inter-session keyframes through an adjacency graph, yielding long-horizon
+            consistency; sessions are brought into a common frame by GNSS-proximity place recognition and
+            then jointly optimized in a unified factor graph. The result is inter- and intra-session
+            consistency without dynamic object removal, and cross-platform robustness with minimal tuning.
           </p>
         </div>
       </div>
@@ -113,45 +110,135 @@
   </div>
 </section>
 
-<!-- Method -->
+<!-- Method + A/B comparison -->
 <section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-full">
-        <h2 class="title is-3 has-text-centered">Chained Loop Closure</h2>
-        <div class="content">
-          <figure class="image">
-            <img src="static/images/graph.png" class="results-img" alt="Chained closure detection and verification pipeline">
-            <figcaption class="has-text-centered">
-              Starting from a new direct loop closure, a BFS over the pose graph gathers connected keyframes,
-              ICP verifies each candidate chained closure (accepting those with residual <i>e<sub>ij</sub> ≤ τ</i>),
-              and the verified constraints are added as new edges to the adjacency graph.
-            </figcaption>
-          </figure>
-        </div>
+  <div class="container is-max-widescreen">
+    <h2 class="title is-3 has-text-centered">Chained Loop Closure</h2>
+
+    <div class="content">
+      <figure class="image">
+        <img src="static/images/graph.png" class="results-img" alt="Chained closure detection and verification pipeline">
+        <figcaption class="has-text-centered">
+          A new direct loop closure seeds a BFS over the pose graph; ICP verifies each candidate chained
+          closure (keeping those with residual <i>e<sub>ij</sub> &le; &tau;</i>), and the verified
+          constraints become new edges in the cross-session adjacency graph.
+        </figcaption>
+      </figure>
+    </div>
+
+    <div class="side-by-side" data-sync-group>
+      <div>
+        <p class="pair-label">w/o chained closure</p>
+        <video class="video-player" autoplay loop muted playsinline controls
+               preload="auto" poster="static/images/unchained_poster.jpg">
+          <source src="static/videos/mars_unchained_intersection.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div>
+        <p class="pair-label">w/ chained closure</p>
+        <video class="video-player" autoplay loop muted playsinline controls
+               preload="auto" poster="static/images/chained_poster.jpg">
+          <source src="static/videos/mars_chained_intersection.mp4" type="video/mp4">
+        </video>
       </div>
     </div>
+    <p class="pair-caption">
+      Five sessions accumulating over an intersection that each of them revisits from a different
+      direction, with loop closure constraints drawn in magenta. With direct closures alone the session
+      trajectories stay fanned apart through the turn; chaining adds the constraints that pull them onto
+      the same geometry.
+    </p>
+  </div>
+</section>
+
+<!-- Multi-session map alignment -->
+<section class="section">
+  <div class="container is-max-widescreen">
+    <h2 class="title is-3 has-text-centered">Multi-Session Map Alignment</h2>
+    <div class="side-by-side">
+      <div>
+        <p class="pair-label">before merging</p>
+        <img src="static/images/map_align_before.png" class="results-img" alt="Current session trajectory in its own coordinate frame, misaligned with the loaded map">
+      </div>
+      <div>
+        <p class="pair-label">after merging</p>
+        <img src="static/images/map_align_after.png" class="results-img" alt="Current session trajectory transformed into the loaded map frame">
+      </div>
+    </div>
+    <p class="pair-caption">
+      The current session starts at the origin of its own frame, inconsistent with the map frame of the
+      loaded sessions. A RANSAC-estimated transform aligns it to the loaded map, which re-enables loop
+      closure detection against the earlier sessions along the transformed trajectory.
+    </p>
   </div>
 </section>
 
 <!-- Results -->
 <section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-full">
-        <h2 class="title is-3 has-text-centered">Results</h2>
-        <div class="content">
-          <figure class="image">
-            <img src="static/images/eval.png" class="results-img" alt="Trajectory evaluation across sessions">
-            <figcaption class="has-text-centered">
-              Estimated trajectories across multiple sessions (top vs. bottom rows) overlaid per session, with the
-              per-session alignment error against ground truth shown on the right. Evaluated on the multi-session
-              MARS and NCLT datasets.
-            </figcaption>
-          </figure>
-        </div>
-      </div>
+  <div class="container is-max-widescreen">
+    <h2 class="title is-3 has-text-centered">Results</h2>
+
+    <div class="content">
+      <figure class="image">
+        <img src="static/images/eval.png" class="results-img" alt="Trajectory evaluation across sessions">
+        <figcaption class="has-text-centered">
+          Per-session trajectories and alignment error against ground truth, on the multi-session MARS and
+          NCLT datasets.
+        </figcaption>
+      </figure>
     </div>
+
+    <h3 class="title is-5 has-text-centered">Point Cloud Registration RMSE</h3>
+    <div class="table-container">
+      <table class="table is-narrow is-fullwidth is-hoverable">
+        <thead>
+          <tr>
+            <th>Method</th><th>Street 1</th><th>Street 2</th><th>Street 3</th><th>Street 4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Fast-LIO2</td><td>5.108 (2.551)</td><td>5.071 (2.425)</td><td>4.989 (2.513)</td><td>5.028 (2.473)</td></tr>
+          <tr><td>LAMM</td><td>6.650 (2.624)</td><td>6.652 (2.622)</td><td>6.510 (2.634)</td><td>6.739 (2.607)</td></tr>
+          <tr><td>Ours unchained</td><td><b>3.764</b> (<b>2.306</b>)</td><td>4.686 (2.452)</td><td><b>3.701</b> (2.416)</td><td>4.211 (2.272)</td></tr>
+          <tr><td>Ours chained</td><td>4.091 (2.400)</td><td><b>3.860</b> (<b>2.120</b>)</td><td>3.915 (<b>2.190</b>)</td><td><b>3.793</b> (<b>2.059</b>)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-caption">
+      Accumulated registration RMSE in meters on MARS, reported as RANSAC (ICP-refined); lower is better.
+      Our RANSAC error is about 20% below Fast-LIO2 and 40% below LAMM, and the chained variant gives the
+      lowest ICP-refined error on most streets.
+    </p>
+
+    <h3 class="title is-5 has-text-centered" style="margin-top:2.5rem;">Runtime and Memory</h3>
+    <div class="table-container">
+      <table class="table is-narrow is-fullwidth is-hoverable">
+        <thead>
+          <tr>
+            <th>Dataset</th><th>Method</th><th>Frontend (ms)</th><th>Backend (ms)</th><th>FPS (Hz)</th><th>RAM (MB)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td rowspan="4">MARS</td><td>Fast-LIO2</td><td>22.28</td><td>&ndash;</td><td>44.88</td><td>1065.56</td></tr>
+          <tr><td>LAMM</td><td>22.28</td><td>21.25</td><td>22.97</td><td>16821.90</td></tr>
+          <tr><td>Ours unchained</td><td>29.88</td><td>402.33</td><td>2.31</td><td>12571.12</td></tr>
+          <tr><td>Ours chained</td><td>29.39</td><td>447.02</td><td>2.10</td><td>13668.46</td></tr>
+          <tr><td rowspan="4">NCLT</td><td>Fast-LIO2</td><td>7.34</td><td>&ndash;</td><td>136.17</td><td>928.77</td></tr>
+          <tr><td>LAMM</td><td>7.34</td><td>11.31</td><td>53.61</td><td>5917.86</td></tr>
+          <tr><td>Ours unchained</td><td>7.79</td><td>67.50</td><td>13.28</td><td>5682.82</td></tr>
+          <tr><td>Ours chained</td><td>7.82</td><td>70.13</td><td>12.83</td><td>5816.96</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-caption">
+      Measured on the final session, with all four previous maps loaded and jointly optimized. Frontend
+      cost stays at the Fast-LIO2 level because optimization runs asynchronously in the backend: roughly
+      2&nbsp;Hz on the 12-hour, 128-channel MARS dataset and 13&nbsp;Hz on the 8-hour, 32-channel NCLT dataset.
+    </p>
+
+    <p class="has-text-centered has-text-grey" style="margin-top:2rem;">
+      Full tables and ablations are in the <a href="https://arxiv.org/abs/2609.12221">paper</a>.
+    </p>
   </div>
 </section>
 
@@ -186,5 +273,6 @@
   </div>
 </footer>
 
+<script src="static/js/video-sync.js"></script>
 </body>
 </html>

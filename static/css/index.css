@@ -50,20 +50,55 @@ body {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
 }
 
+.video-player {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  background: #000;
+}
+
 .content figcaption {
   color: #4a4a4a;
   font-size: 0.95rem;
   margin-top: 0.75rem;
 }
 
-pre {
-  border-radius: 6px;
+/* Two-up layout shared by the video A/B pair and the map-alignment figure pair. */
+.side-by-side {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
 }
 
-.steps-card {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 1.25rem 1.5rem;
-  margin-bottom: 1.5rem;
-  background: #fafafa;
+@media screen and (max-width: 900px) {
+  .side-by-side {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pair-label {
+  font-family: 'Google Sans', sans-serif;
+  font-size: 0.95rem;
+  text-align: center;
+  margin-bottom: 0.5rem !important;
+  color: #363636;
+}
+
+.pair-caption,
+.table-caption {
+  color: #4a4a4a;
+  font-size: 0.95rem;
+  margin-top: 1rem;
+}
+
+.table td,
+.table th {
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+pre {
+  border-radius: 6px;
 }
