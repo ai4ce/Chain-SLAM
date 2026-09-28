@@ -72,7 +72,7 @@ body {
   gap: 1.5rem;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 600px) {
   .side-by-side {
     grid-template-columns: 1fr;
   }
@@ -80,23 +80,52 @@ body {
 
 .pair-label {
   font-family: 'Google Sans', sans-serif;
-  font-size: 0.95rem;
+  font-size: 1.3rem;
+  font-weight: 700;
   text-align: center;
-  margin-bottom: 0.5rem !important;
-  color: #363636;
+  margin-bottom: 0.6rem !important;
+  color: #222;
 }
 
 .pair-caption,
 .table-caption {
   color: #4a4a4a;
   font-size: 0.95rem;
-  margin-top: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .table td,
 .table th {
   font-size: 0.9rem;
   vertical-align: middle;
+}
+
+/* Heavy rule between dataset groups (MARS / NCLT). */
+.results-table thead th {
+  border-bottom: 2px solid #363636;
+}
+
+.results-table tr.group-start td {
+  border-top: 3px solid #363636;
+}
+
+.results-table tbody tr:first-child td {
+  border-top: none;
+}
+
+.rank-1 {
+  background-color: #b9ecb9 !important;
+  font-weight: 700;
+}
+
+.rank-2 {
+  background-color: #fff2a1 !important;
+}
+
+.table-caption .rank-1,
+.table-caption .rank-2 {
+  padding: 0 0.3em;
+  border-radius: 3px;
 }
 
 pre {

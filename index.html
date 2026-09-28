@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="static/css/index.css?v=2">
 </head>
 <body>
 
@@ -112,7 +112,7 @@
 
 <!-- Method + A/B comparison -->
 <section class="section">
-  <div class="container is-max-widescreen">
+  <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Chained Loop Closure</h2>
 
     <div class="content">
@@ -126,6 +126,12 @@
       </figure>
     </div>
 
+    <p class="pair-caption">
+      Five sessions accumulating over an intersection that each of them revisits from a different
+      direction, with loop closure constraints drawn in magenta. With direct closures alone the session
+      trajectories stay fanned apart through the turn; chaining adds the constraints that pull them onto
+      the same geometry.
+    </p>
     <div class="side-by-side" data-sync-group>
       <div>
         <p class="pair-label">w/o chained closure</p>
@@ -142,40 +148,34 @@
         </video>
       </div>
     </div>
-    <p class="pair-caption">
-      Five sessions accumulating over an intersection that each of them revisits from a different
-      direction, with loop closure constraints drawn in magenta. With direct closures alone the session
-      trajectories stay fanned apart through the turn; chaining adds the constraints that pull them onto
-      the same geometry.
-    </p>
   </div>
 </section>
 
 <!-- Multi-session map alignment -->
 <section class="section">
-  <div class="container is-max-widescreen">
+  <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Multi-Session Map Alignment</h2>
-    <div class="side-by-side">
-      <div>
-        <p class="pair-label">before merging</p>
-        <img src="static/images/map_align_before.png" class="results-img" alt="Current session trajectory in its own coordinate frame, misaligned with the loaded map">
-      </div>
-      <div>
-        <p class="pair-label">after merging</p>
-        <img src="static/images/map_align_after.png" class="results-img" alt="Current session trajectory transformed into the loaded map frame">
-      </div>
-    </div>
     <p class="pair-caption">
       The current session starts at the origin of its own frame, inconsistent with the map frame of the
       loaded sessions. A RANSAC-estimated transform aligns it to the loaded map, which re-enables loop
       closure detection against the earlier sessions along the transformed trajectory.
     </p>
+    <div class="side-by-side">
+      <div>
+        <p class="pair-label">Before merging</p>
+        <img src="static/images/map_align_before.png" class="results-img" alt="Current session trajectory in its own coordinate frame, misaligned with the loaded map">
+      </div>
+      <div>
+        <p class="pair-label">After merging</p>
+        <img src="static/images/map_align_after.png" class="results-img" alt="Current session trajectory transformed into the loaded map frame">
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- Results -->
 <section class="section">
-  <div class="container is-max-widescreen">
+  <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Results</h2>
 
     <div class="content">
@@ -188,53 +188,57 @@
       </figure>
     </div>
 
-    <h3 class="title is-5 has-text-centered">Point Cloud Registration RMSE</h3>
+    <h3 class="title is-5 has-text-centered" style="margin-top:2.5rem;">Trajectory Accuracy (3D APE)</h3>
+    <p class="table-caption">
+      Absolute pose error over full 6-DoF trajectories, with <span class="rank-1">first</span> and
+      <span class="rank-2">second</span> places highlighted; lower is better. Chained loop closure gives the
+      lowest translation error on both datasets.
+    </p>
     <div class="table-container">
-      <table class="table is-narrow is-fullwidth is-hoverable">
+      <table class="table is-narrow is-fullwidth results-table">
         <thead>
           <tr>
-            <th>Method</th><th>Street 1</th><th>Street 2</th><th>Street 3</th><th>Street 4</th>
+            <th>Dataset</th><th>Method</th><th>T RMSE (m)</th><th>R RMSE (deg)</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td>Fast-LIO2</td><td>5.108 (2.551)</td><td>5.071 (2.425)</td><td>4.989 (2.513)</td><td>5.028 (2.473)</td></tr>
-          <tr><td>LAMM</td><td>6.650 (2.624)</td><td>6.652 (2.622)</td><td>6.510 (2.634)</td><td>6.739 (2.607)</td></tr>
-          <tr><td>Ours unchained</td><td><b>3.764</b> (<b>2.306</b>)</td><td>4.686 (2.452)</td><td><b>3.701</b> (2.416)</td><td>4.211 (2.272)</td></tr>
-          <tr><td>Ours chained</td><td>4.091 (2.400)</td><td><b>3.860</b> (<b>2.120</b>)</td><td>3.915 (<b>2.190</b>)</td><td><b>3.793</b> (<b>2.059</b>)</td></tr>
+          <tr class="group-start"><td rowspan="4">MARS</td><td>Fast-LIO2</td><td>52.616</td><td>4.708</td></tr>
+          <tr><td>LAMM</td><td>43.688</td><td>10.285</td></tr>
+          <tr><td>Ours unchained</td><td class="rank-2">13.511</td><td class="rank-2">3.729</td></tr>
+          <tr><td>Ours chained</td><td class="rank-1">9.640</td><td class="rank-1">3.448</td></tr>
+          <tr class="group-start"><td rowspan="4">NCLT</td><td>Fast-LIO2</td><td>2.279</td><td class="rank-1">2.618</td></tr>
+          <tr><td>LAMM</td><td>33.547</td><td>11.549</td></tr>
+          <tr><td>Ours unchained</td><td class="rank-2">1.473</td><td>4.876</td></tr>
+          <tr><td>Ours chained</td><td class="rank-1">1.197</td><td class="rank-2">4.647</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="table-caption">
-      Accumulated registration RMSE in meters on MARS, reported as RANSAC (ICP-refined); lower is better.
-      Our RANSAC error is about 20% below Fast-LIO2 and 40% below LAMM, and the chained variant gives the
-      lowest ICP-refined error on most streets.
-    </p>
 
     <h3 class="title is-5 has-text-centered" style="margin-top:2.5rem;">Runtime and Memory</h3>
+    <p class="table-caption">
+      Measured on the final session, with all four previous maps loaded and jointly optimized. Frontend
+      cost stays at the Fast-LIO2 level because optimization runs asynchronously in the backend: roughly
+      2&nbsp;Hz on the 12-hour, 128-channel MARS dataset and 13&nbsp;Hz on the 8-hour, 32-channel NCLT dataset.
+    </p>
     <div class="table-container">
-      <table class="table is-narrow is-fullwidth is-hoverable">
+      <table class="table is-narrow is-fullwidth results-table">
         <thead>
           <tr>
             <th>Dataset</th><th>Method</th><th>Frontend (ms)</th><th>Backend (ms)</th><th>FPS (Hz)</th><th>RAM (MB)</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td rowspan="4">MARS</td><td>Fast-LIO2</td><td>22.28</td><td>&ndash;</td><td>44.88</td><td>1065.56</td></tr>
+          <tr class="group-start"><td rowspan="4">MARS</td><td>Fast-LIO2</td><td>22.28</td><td>&ndash;</td><td>44.88</td><td>1065.56</td></tr>
           <tr><td>LAMM</td><td>22.28</td><td>21.25</td><td>22.97</td><td>16821.90</td></tr>
           <tr><td>Ours unchained</td><td>29.88</td><td>402.33</td><td>2.31</td><td>12571.12</td></tr>
           <tr><td>Ours chained</td><td>29.39</td><td>447.02</td><td>2.10</td><td>13668.46</td></tr>
-          <tr><td rowspan="4">NCLT</td><td>Fast-LIO2</td><td>7.34</td><td>&ndash;</td><td>136.17</td><td>928.77</td></tr>
+          <tr class="group-start"><td rowspan="4">NCLT</td><td>Fast-LIO2</td><td>7.34</td><td>&ndash;</td><td>136.17</td><td>928.77</td></tr>
           <tr><td>LAMM</td><td>7.34</td><td>11.31</td><td>53.61</td><td>5917.86</td></tr>
           <tr><td>Ours unchained</td><td>7.79</td><td>67.50</td><td>13.28</td><td>5682.82</td></tr>
           <tr><td>Ours chained</td><td>7.82</td><td>70.13</td><td>12.83</td><td>5816.96</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="table-caption">
-      Measured on the final session, with all four previous maps loaded and jointly optimized. Frontend
-      cost stays at the Fast-LIO2 level because optimization runs asynchronously in the backend: roughly
-      2&nbsp;Hz on the 12-hour, 128-channel MARS dataset and 13&nbsp;Hz on the 8-hour, 32-channel NCLT dataset.
-    </p>
 
     <p class="has-text-centered has-text-grey" style="margin-top:2rem;">
       Full tables and ablations are in the <a href="https://arxiv.org/abs/2609.12221">paper</a>.
@@ -273,6 +277,6 @@
   </div>
 </footer>
 
-<script src="static/js/video-sync.js"></script>
+<script src="static/js/video-sync.js?v=2"></script>
 </body>
 </html>
